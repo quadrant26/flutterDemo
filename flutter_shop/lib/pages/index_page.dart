@@ -8,7 +8,7 @@ class IndexPage extends StatelessWidget {
         title: Text('百姓生活+')
       ),
       body: Center(
-        child: Text('首页内容')
+        child: Text('百姓生活+')
       )
     );
   }
