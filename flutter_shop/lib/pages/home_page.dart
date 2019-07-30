@@ -15,29 +15,31 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('天上人间'),),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: typeController,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(10.0),
-                labelText: '美女类型',
-                helperText: '请输入你喜欢的类型'
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: typeController,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(10.0),
+                  labelText: '美女类型',
+                  helperText: '请输入你喜欢的类型'
+                ),
+                autofocus: false,
               ),
-              autofocus: false,
-            ),
-            RaisedButton(
-              onPressed: _choiceAction,
-              child: Text('选择完毕')
-            ),
-            Text(
-              showText,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            )
-          ],
-        ),
+              RaisedButton(
+                onPressed: _choiceAction,
+                child: Text('选择完毕')
+              ),
+              Text(
+                showText,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              )
+            ],
+          ),
+        )
       )
     );
   }
@@ -50,7 +52,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context) => AlertDialog(title: Text('美女类型不能为空'))
       );
     }else{
-      getHttp( typeController.text.toString() ).then( (val){
+      postHttp( typeController.text.toString() ).then( (val){
         setState(() {
           showText = val['data']['name'].toString();
         });
@@ -63,6 +65,19 @@ class _HomePageState extends State<HomePage> {
       Response response;
       var data = {'name': TypeText};
       response = await Dio().get('https://www.easy-mock.com/mock/5d3ec93ffd577d0215ccf756/flutterShop/dabaojian',
+        queryParameters: data
+      );
+      return response.data;
+    }catch(e){
+      return print(e);
+    }
+  }
+
+  Future postHttp(String TypeText) async {
+    try{
+      Response response;
+      var data = {'name': TypeText};
+      response = await Dio().post('https://www.easy-mock.com/mock/5d3ec93ffd577d0215ccf756/flutterShop/dabaojian_post',
         queryParameters: data
       );
       return response.data;
