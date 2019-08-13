@@ -32,9 +32,12 @@ class _HomePageState extends State<HomePage> {
           if ( snapshot.hasData ){
             var data = json.decode(snapshot.data.toString());
             List<Map> swiper = (data['data']['banner'] as List).cast();
+            List<Map> navigatorList = (data['data']['subnav'] as List).cast();
+
             return Column(
               children: <Widget>[
-                SwiperDiy(swiperDateList: swiper,)
+                SwiperDiy(swiperDateList: swiper),
+                TopNavigator(navigatorList: navigatorList),
               ]
             );
           }else{
@@ -48,9 +51,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/**
- * 首页轮播组件
- */
+// 首页轮播组件
 class SwiperDiy extends StatelessWidget {
 
   final List swiperDateList;
@@ -59,7 +60,6 @@ class SwiperDiy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
     // 设备的像素密度 高 宽
     // print("设备的像素密度: ${ScreenUtil.pixelRatio}");
     // print("设备的高: ${ScreenUtil.screenHeight}");
@@ -79,3 +79,45 @@ class SwiperDiy extends StatelessWidget {
     );
   }
 }
+
+// 首页小导航
+class TopNavigator extends StatelessWidget {
+
+  final List navigatorList;
+
+  TopNavigator({Key key, this.navigatorList}) : super(key: key);
+
+  Widget _gridViewItemUI(BuildContext context, item){
+    return InkWell(
+      onTap: (){print('点击了导航');},
+      child: Column(
+        children: <Widget>[
+          Image.network(item['img'], width: ScreenUtil().setWidth(95) ),
+          Text(item['title'])
+        ],
+      )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 如果列表超过10个则删除之后的
+    if ( this.navigatorList.length > 10){
+      this.navigatorList.removeRange(10, navigatorList.length);
+    }
+
+    return Container(
+      height: ScreenUtil().setHeight(360),
+      padding: EdgeInsets.all(3.0),
+      child: GridView.count(
+        crossAxisCount: 5,
+        padding: EdgeInsets.all(5.0),
+        children: navigatorList.map( (item){
+          return _gridViewItemUI(context, item);
+        }).toList(),
+      ),
+    );
+  }
+}
+
+// 首页广告条
