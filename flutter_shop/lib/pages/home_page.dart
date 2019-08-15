@@ -9,19 +9,37 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
+/**
+ * 保持页面状态
+ * 1. 混入 AutomaticKeepAliveClientMixin
+ *  with AutomaticKeepAliveClientMixin
+ * 2. 重写方法
+ *  @override
+ *  bool get wantKeepAlive => true;
+ * 3. 改造index_page.dart
+ * 其中 tabBodies 重新定义为 List <Widget> tabBodies
+ *  body: IndexedStack(
+ *   index: currentPage,
+ *   children: tabBodies,
+ *  )
+ */
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
-class _HomePageState extends State<HomePage> {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    // getHomePageContent().then( (val){
+    //   setState(() {
+    //    homePageContent = val.toString(); 
+    //   });
+    // });
+    super.initState();
+    print("111111");
+  }
+  
   String homePageContent = '正在获取数据...';
-
-  // @override
-  // void initState() {
-  //   getHomePageContent().then( (val){
-  //     setState(() {
-  //      homePageContent = val.toString(); 
-  //     });
-  //   });
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -258,3 +276,4 @@ class Recommend extends StatelessWidget {
     );
   }
 }
+
