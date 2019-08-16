@@ -28,5 +28,33 @@ Future getHomePageContent () async {
   }catch (e){
     return print('ERROR: ----->${e}');
   }
+
+}
+
+// 获取首页热卖商品
+Future getHomePageBelowContent () async {
+
+  try{
+    print("开始获取首页热卖商品数据...");
+    Response response;
+    Dio dio = new Dio();
+    dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+
+    int page = 1;
+    var formData = {
+      'act': 'hotbelow',
+      'page': page
+    };
+
+    print( servicePath['homePageBelowContent'] );
+    response = await dio.post(servicePath['homePageBelowContent'], data: formData);
+    if ( response.statusCode == 200){
+      return response.data;
+    }else{
+      throw Exception('后端接口出现异常');
+    }
+  }catch (e){
+    return print('ERROR: ----->${e}');
+  }
   
 }

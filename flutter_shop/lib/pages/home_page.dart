@@ -56,6 +56,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             String leaderImage = data['data']['cellmoile']['icon'];
             String leaderPhone = data['data']['cellmoile']['phone'];
             List<Map> recommendList = (data['data']['hotgoods'] as List).cast();
+            String floorTitle = data['data']['floor']['titleImg'];
+            List<Map> flootGoodsList = (data['data']['floor']['youLike'] as List).cast();
+            // print(flootGoodsList);
 
             return SingleChildScrollView(
               child: Column(
@@ -64,7 +67,10 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                   TopNavigator(navigatorList: navigatorList),
                   AdBanner(adPicture: adPicture),
                   LeaderPhone(leaderImage: leaderImage, leaderPhone: leaderPhone),
-                  Recommend(recommendList: recommendList)
+                  Recommend(recommendList: recommendList),
+                  FloorTitle(picture_address: floorTitle),
+                  FloorContent(floorGoodsList: flootGoodsList),
+                  HotGoods(),
                 ]
               ),
             );
@@ -277,3 +283,95 @@ class Recommend extends StatelessWidget {
   }
 }
 
+// 楼层商品标题 图片
+class FloorTitle extends StatelessWidget {
+  final String picture_address;
+
+  const FloorTitle({Key key, this.picture_address}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Image.network(picture_address)
+    );
+  }
+}
+
+class FloorContent extends StatelessWidget {
+  final List floorGoodsList;
+
+  const FloorContent({Key key, this.floorGoodsList}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          _firstRow(),
+          _otherItem()
+        ],
+      ),
+    );
+  }
+
+  Widget _firstRow(){
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoodsList[0], 300),
+        Column(
+          children: <Widget>[
+            _goodsItem(floorGoodsList[1], 150),
+            _goodsItem(floorGoodsList[2], 150),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _otherItem(){
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoodsList[3], 200.0),
+        _goodsItem(floorGoodsList[4], 200.0),
+      ],
+    );
+  }
+
+  Widget _goodsItem(Map Goods, double height){
+    return Container(
+      width: ScreenUtil().setWidth(375),
+      height: ScreenUtil().setWidth(height),
+      decoration: BoxDecoration(
+        border: new Border.all(color: Colors.black12, width: 0.5),
+      ),
+      child: InkWell(
+        onTap: (){print('点击楼层商品');},
+        child: Image.network(Goods['img'])
+      )
+    );
+  }
+}
+
+// 获取火热推荐
+class HotGoods extends StatefulWidget {
+  _HotGoodsState createState() => _HotGoodsState();
+}
+
+class _HotGoodsState extends State<HotGoods> {
+
+  @override
+  void initState() { 
+    super.initState();
+    getHomePageBelowContent().then( (val){
+      print(val);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+       child: Text('kang'),
+    );
+  }
+}
