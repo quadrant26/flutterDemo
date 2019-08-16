@@ -25,6 +25,9 @@ class HomePage extends StatefulWidget {
  */
 class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
+  int page = 1;
+  List<Map> hotGoodsListBelow = [];
+
   @override
   bool get wantKeepAlive => true;
 
@@ -37,16 +40,22 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     // });
     super.initState();
     print("111111");
+    _getHotGoodsBelow();
   }
   
   String homePageContent = '正在获取数据...';
 
   @override
   Widget build(BuildContext context) {
+   var formData = {
+      'lon': '115.02932',
+      'lat': '35.76189',
+      'act': 'index'
+    };
     return Scaffold(
       appBar: AppBar(title: Text('百姓生活+')),
       body: FutureBuilder(
-        future: getHomePageContent(),
+        future: request('homePageContent', formData: formData),
         builder: (context, snapshot){
           if ( snapshot.hasData ){
             var data = json.decode(snapshot.data.toString());
@@ -70,7 +79,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                   Recommend(recommendList: recommendList),
                   FloorTitle(picture_address: floorTitle),
                   FloorContent(floorGoodsList: flootGoodsList),
-                  HotGoods(),
+                  _hotGoods(),
                 ]
               ),
             );
@@ -80,6 +89,87 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             );
           }
         },
+      )
+    );
+  }
+
+  // 获取火爆专区商品
+  void _getHotGoodsBelow (){
+    var formData = {"page": page, "act": 'hotbelow'};
+    request('homePageBelowContent', formData: formData).then( (val){
+      var data = json.decode(val.toString());
+      List<Map> newGoodsList = (data['data']['list'] as List).cast();
+      setState( (){
+        hotGoodsListBelow.addAll(newGoodsList);
+        page++;
+      });
+    });
+  }
+
+  Widget hotTitle = Container(
+    margin: EdgeInsets.only(top: 10.0),
+    padding: EdgeInsets.all(5.0),
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      border:Border(
+        bottom: BorderSide(width:0.5 ,color:Colors.black12)
+      )
+    ),
+    child: Text('火爆专区')
+  );
+
+  Widget _wrapList (){
+    if ( hotGoodsListBelow.length != 0 ){
+      List<Widget> listWidget = hotGoodsListBelow.map( (val){
+        return InkWell(
+          onTap: (){},
+          child: Container(
+            width: ScreenUtil().setWidth(372),
+            color: Colors.white,
+            padding: EdgeInsets.all(5.0),
+            margin: EdgeInsets.only(bottom: 3.0),
+            child: Column(
+              children: <Widget>[
+                Image.network( val['img'], width: ScreenUtil().setWidth(370) ),
+                Text(
+                  val['goods_name'],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.pink, fontSize: ScreenUtil().setSp(26)),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text('￥${val['org_price']}'),
+                    Text(
+                      '￥${val['marketPrice']}',
+                      style: TextStyle(color: Colors.black26, decoration: TextDecoration.lineThrough),
+                    )
+                  ]
+                ),
+              ]
+            ),
+          )
+        );
+      }).toList();
+
+      // 返回流式布局
+      return Wrap(
+        spacing: 2,
+        children: listWidget
+      );
+    }else{
+      return Text("没有获取到数据");
+    }
+  }
+
+  Widget _hotGoods (){
+    return Container(
+      child: Column(
+        children: <Widget>[
+          hotTitle,
+          _wrapList()
+        ]
       )
     );
   }
@@ -363,7 +453,12 @@ class _HotGoodsState extends State<HotGoods> {
   @override
   void initState() { 
     super.initState();
-    getHomePageBelowContent().then( (val){
+    int page = 1;
+    var formData = {
+      'act': 'hotbelow',
+      'page': page
+    };
+    request('homePageBelowContent', formData: formData).then( (val){
       print(val);
     });
   }
