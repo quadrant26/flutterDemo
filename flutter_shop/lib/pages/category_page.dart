@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
 import 'dart:convert';
+import '../model/category.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -16,12 +17,5 @@ class _CategoryPageState extends State<CategoryPage> {
         child: Text('分类页面')
       )
     );
-  }
-
-  void _getCategory() async {
-    await request('getCategory').then( (val){
-      var data = json.decode(val.toString());
-      print(data);
-    });
   }
 }
