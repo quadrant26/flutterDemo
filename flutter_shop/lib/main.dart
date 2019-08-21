@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import './pages/index_page.dart';
 import 'package:provide/provide.dart';
 import './provide/counter.dart';
+import './provide/child_category.dart';
 
 void main() {
   var counter = Count();
+  var childCategory = ChildCategory();
   var providers = Providers();
 
-  providers..provide(Provider<Count>.value(counter));
+  providers
+    ..provide(Provider<Count>.value(counter))
+    ..provide(Provider<ChildCategory>.value(childCategory));
   runApp(ProviderNode(child: MyApp(), providers: providers));
 }
 
