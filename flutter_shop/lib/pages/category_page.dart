@@ -40,6 +40,7 @@ class LeftCategoryNav extends StatefulWidget {
 class _LeftCategoryNavState extends State<LeftCategoryNav> {
 
   List list = [];
+  var listIndex = 0;
 
   @override
   void initState() {
@@ -67,17 +68,22 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
 
   // 单独的子项
   Widget _leftInkWell(int index){
+    bool isClick = false;
+    isClick = (index==listIndex) ? true : false;
     return InkWell(
       onTap: (){
+        setState(() {
+          listIndex = index;
+        });
         // provide 改变
         var childList = list[index].bxMallSubDto;
         Provide.value<ChildCategory>(context).getChildCategory(childList);
       },
       child: Container(
         height: ScreenUtil().setHeight(100),
-        padding: EdgeInsets.only(left: 10, top:20),
+        padding: EdgeInsets.only(left: 10, top:15),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isClick ? Color.fromRGBO(246,246,246,1.0) : Colors.white, // 颜色调整
           border: Border(
             bottom: BorderSide(width: 1.0, color: Colors.black12),
           ),
@@ -99,6 +105,9 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       setState(() {
         list = category.data;
       });
+
+      // 设置默认加载第一项内容
+      Provide.value<ChildCategory>(context).getChildCategory(list[0].bxMallSubDto);
     });
   }
 }
