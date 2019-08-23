@@ -4,6 +4,7 @@ import 'package:provide/provide.dart';
 import '../service/service_method.dart';
 import 'dart:convert';
 import '../model/category.dart';
+import '../model/categoryGoodsList.dart';
 import '../provide/child_category.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -192,8 +193,9 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     // 获取category商品列表
     await request('getCategoryList', formData: data).then( (val){
       var data = json.decode(val.toString());
-      print("分类商品列表：》》》》》》》》》》");
-      print(data);
+
+      CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(data);
+      print(">>>>>>>>>>>>>>>: ${goodsList.data[0].goodsName}");
     });
   }
 }
