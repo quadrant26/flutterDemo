@@ -174,7 +174,7 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
     isClick = (index==Provide.value<ChildCategory>(context).childIndex) ? true : false;
     return InkWell(
       onTap: (){
-        Provide.value<ChildCategory>(context).changeChildIndex(index);
+        Provide.value<ChildCategory>(context).changeChildIndex(index, item.mallSubId);
         _getGoodsListId(item.mallSubId);
       },
       child: Container(
@@ -190,7 +190,7 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
     );
   }
 
-  // 右侧大类商品列表
+  // 右侧小类商品列表
   void _getGoodsListId(String subParentId) async {
     var data = {
       'maxParentId': Provide.value<ChildCategory>(context).maxParentId,
@@ -202,7 +202,11 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
     await request('getCategoryList', formData: data).then( (val){
       var data = json.decode(val.toString());
       CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(data);
-      Provide.value<CategoryGoodsListProvide>(context).getGoodsList(goodsList.data);
+      if( goodsList.data == null){
+        Provide.value<CategoryGoodsListProvide>(context).getGoodsList([]);
+      }else{
+        Provide.value<CategoryGoodsListProvide>(context).getGoodsList(goodsList.data);
+      }
     });
   }
 }
@@ -224,17 +228,21 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
   Widget build(BuildContext context) {
     return Provide<CategoryGoodsListProvide>(
       builder: (context, child, data){
-        return Expanded(
-          child: Container(
-            width: ScreenUtil().setWidth(570),
-            child: ListView.builder(
-              itemCount: data.goodsList.length,
-              itemBuilder: (context, index){
-                return _listWidget(data.goodsList, index);
-              }
-            )
-          ),
-        );
+        if (data.goodsList.length > 0){
+          return Expanded(
+            child: Container(
+              width: ScreenUtil().setWidth(570),
+              child: ListView.builder(
+                itemCount: data.goodsList.length,
+                itemBuilder: (context, index){
+                  return _listWidget(data.goodsList, index);
+                }
+              )
+            ),
+          );
+        }else{
+          return Text('暂时没有数据...');
+        }
       }
     ); 
     
