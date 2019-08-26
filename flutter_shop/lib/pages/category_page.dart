@@ -82,7 +82,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         // provide 改变
         var childList = list[index].bxMallSubDto;
         var maxParentId = list[index].mallCategoryId;
-        Provide.value<ChildCategory>(context).getChildCategory(childList);
+        Provide.value<ChildCategory>(context).getChildCategory(childList, maxParentId);
         _getGoodsListId(maxParentId: maxParentId);
       },
       child: Container(
@@ -113,7 +113,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       });
 
       // 设置默认加载第一项内容
-      Provide.value<ChildCategory>(context).getChildCategory(list[0].bxMallSubDto);
+      Provide.value<ChildCategory>(context).getChildCategory(list[0].bxMallSubDto, list[0].mallCategoryId);
     });
   }
 
@@ -175,6 +175,7 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
     return InkWell(
       onTap: (){
         Provide.value<ChildCategory>(context).changeChildIndex(index);
+        _getGoodsListId(item.mallSubId);
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
@@ -187,6 +188,22 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
         ),
       )
     );
+  }
+
+  // 右侧大类商品列表
+  void _getGoodsListId(String subParentId) async {
+    var data = {
+      'maxParentId': Provide.value<ChildCategory>(context).maxParentId,
+      'subParentId': subParentId,
+      'page': 1
+    };
+
+    // 获取category商品列表
+    await request('getCategoryList', formData: data).then( (val){
+      var data = json.decode(val.toString());
+      CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(data);
+      Provide.value<CategoryGoodsListProvide>(context).getGoodsList(goodsList.data);
+    });
   }
 }
 
