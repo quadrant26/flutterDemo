@@ -182,7 +182,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
   Widget build(BuildContext context) {
     return Container(
       width: ScreenUtil().setWidth(570),
-      height: ScreenUtil().setHeight(1000),
+      height: ScreenUtil().setHeight(940),
       child: ListView.builder(
         itemCount: list.length,
         itemBuilder: (context, index){

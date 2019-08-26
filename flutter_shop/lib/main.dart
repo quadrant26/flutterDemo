@@ -3,15 +3,19 @@ import './pages/index_page.dart';
 import 'package:provide/provide.dart';
 import './provide/counter.dart';
 import './provide/child_category.dart';
+import './provide/category_goods_list.dart';
 
 void main() {
   var counter = Count();
   var childCategory = ChildCategory();
+  var categoryGoodsListProvide = CategoryGoodsListProvide();
   var providers = Providers();
 
+  // 将状态放入底层
   providers
     ..provide(Provider<Count>.value(counter))
-    ..provide(Provider<ChildCategory>.value(childCategory));
+    ..provide(Provider<ChildCategory>.value(childCategory))
+    ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsListProvide));
   runApp(ProviderNode(child: MyApp(), providers: providers));
 }
 
