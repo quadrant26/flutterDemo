@@ -42,8 +42,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     //   });
     // });
     super.initState();
-    print("111111");
-    // _getHotGoodsBelow();
+    _getHotGoodsBelow();
   }
   
   String homePageContent = '正在获取数据...';
@@ -119,17 +118,16 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
 
   // 获取火爆专区商品
-  // void _getHotGoodsBelow (){
-  //   var formData = {"page": page, "act": 'hotbelow'};
-  //   request('homePageBelowContent', formData: formData).then( (val){
-  //     var data = json.decode(val.toString());
-  //     List<Map> newGoodsList = (data['data']['list'] as List).cast();
-  //     setState( (){
-  //       hotGoodsListBelow.addAll(newGoodsList);
-  //       page++;
-  //     });
-  //   });
-  // }
+  void _getHotGoodsBelow (){
+    var formData = {"page": page, "act": 'hotbelow'};
+    request('homePageBelowContent', formData: formData).then( (val){
+      var data = json.decode(val.toString());
+      List<Map> newGoodsList = (data['data']['list'] as List).cast();
+      setState( (){
+        hotGoodsListBelow.addAll(newGoodsList);
+      });
+    });
+  }
 
   Widget hotTitle = Container(
     margin: EdgeInsets.only(top: 10.0),
