@@ -170,6 +170,8 @@ class CategoryGoodsList extends StatefulWidget {
 
 class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
+  List list = [];
+
   @override
   void initState() {
     _getGoodsList();
@@ -179,7 +181,14 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('商品列表')
+      width: ScreenUtil().setWidth(570),
+      height: ScreenUtil().setHeight(1000),
+      child: ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (context, index){
+          return _ListWidget(index);
+        }
+      )
     );
   }
 
@@ -193,9 +202,75 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     // 获取category商品列表
     await request('getCategoryList', formData: data).then( (val){
       var data = json.decode(val.toString());
-
       CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(data);
-      print(">>>>>>>>>>>>>>>: ${goodsList.data[0].goodsName}");
+      setState( () {
+        list = goodsList.data;
+      });
     });
+  }
+
+  Widget _goodsImage (index){
+    return Container(
+      width: ScreenUtil().setWidth(150),
+      child: Image.network("http://sun.siriusalpha.cn/"+list[index].goodsImg),
+    );
+  }
+
+  Widget _goodsName(index){
+    return Container(
+      padding: EdgeInsets.all(5.0),
+      width: ScreenUtil().setWidth(400),
+      child: Text(
+        list[index].goodsName,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: ScreenUtil().setSp(28),),
+      )
+    );
+  }
+
+  Widget _goodsPrice (index){
+    return Container(
+      margin: EdgeInsets.only(top: 5.0, left: 5.0),
+      width: ScreenUtil().setWidth(400),
+      child: Row(
+        children: <Widget>[
+          Text(
+            '价格: ￥${list[index].shopPrice}',
+            style: TextStyle(fontSize: ScreenUtil().setSp(28), color: Colors.pink)
+          ),
+          Text(
+            '￥${list[index].marketPrice}',
+            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: Colors.black26, decoration: TextDecoration.lineThrough)
+          ),
+        ]
+      ),
+    );
+  }
+
+  Widget _ListWidget(int index){
+    return InkWell(
+      onTap: (){},
+      child: Container(
+        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(width: 1.0, color: Colors.black12),
+          )
+        ),
+        child: Row(
+          children: <Widget>[
+            _goodsImage(index),
+            Column(
+              children: <Widget>[
+                _goodsName(index),
+                _goodsPrice(index),
+              ]
+            )
+          ]
+        )
+      )
+    );
   }
 }
