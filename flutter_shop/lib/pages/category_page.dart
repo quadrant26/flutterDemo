@@ -291,7 +291,9 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     await request('getCategoryList', formData: data).then( (val){
       var data = json.decode(val.toString());
       CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(data);
-      if( goodsList.data == null){
+      // 判断有问题 goodsList.data == null
+      // 返回的是一个空数组 不能进行 null 判断
+      if( goodsList.data.length == 0){
         Fluttertoast.showToast(
           msg: '已经到底了',
           toastLength: Toast.LENGTH_SHORT,
@@ -300,7 +302,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
           textColor: Colors.white,
           fontSize: 16.0
         );
-        Provide.value<ChildCategory>(context).changeNoMore("没有更多了..");
+        Provide.value<ChildCategory>(context).changeNoMore("没有更多了");
       }else{
         Provide.value<CategoryGoodsListProvide>(context).getMoreGoodsList(goodsList.data);
       }
