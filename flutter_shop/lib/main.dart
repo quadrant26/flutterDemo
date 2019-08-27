@@ -5,15 +5,14 @@ import './provide/counter.dart';
 import './provide/child_category.dart';
 import './provide/category_goods_list.dart';
 import 'package:fluro/fluro.dart';
+import './routers/routers.dart';
+import './routers/application.dart';
 
 void main() {
   var counter = Count();
   var childCategory = ChildCategory();
   var categoryGoodsListProvide = CategoryGoodsListProvide();
   var providers = Providers();
-
-  // fluro 初始化
-  final router = Router();
 
   // 将状态放入底层
   providers
@@ -26,9 +25,16 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // fluro 初始化
+    final router = Router();
+    // 路由注入
+    Routers.configureRouters(router);
+    Application.router = router;
+
     return Container(
       child: MaterialApp(
         title: '百姓生活+',
+        onGenerateRoute: Application.router.generator,
         debugShowCheckedModeBanner: false, //去掉右上角 debug logo
         theme: ThemeData(
           primaryColor: Colors.pink,
