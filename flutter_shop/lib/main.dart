@@ -12,6 +12,9 @@ void main() {
   var categoryGoodsListProvide = CategoryGoodsListProvide();
   var providers = Providers();
 
+  // fluro 初始化
+  final router = Router();
+
   // 将状态放入底层
   providers
     ..provide(Provider<Count>.value(counter))
