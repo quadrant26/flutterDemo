@@ -7,17 +7,20 @@ import './provide/category_goods_list.dart';
 import 'package:fluro/fluro.dart';
 import './routers/routers.dart';
 import './routers/application.dart';
+import './provide/detail_info.dart';
 
 void main() {
   var counter = Count();
   var childCategory = ChildCategory();
   var categoryGoodsListProvide = CategoryGoodsListProvide();
+  var detailInfoProvide = DetailInfoProvide();
   var providers = Providers();
 
   // 将状态放入底层
   providers
     ..provide(Provider<Count>.value(counter))
     ..provide(Provider<ChildCategory>.value(childCategory))
+    ..provide(Provider<DetailInfoProvide>.value(detailInfoProvide))
     ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsListProvide));
   runApp(ProviderNode(child: MyApp(), providers: providers));
 }
