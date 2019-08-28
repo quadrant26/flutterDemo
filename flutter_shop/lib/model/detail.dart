@@ -30,6 +30,7 @@ class DetailGoodsData {
   String originalImg;
   String goodsNumber;
   String goodsDesc;
+  String goodsSn;
 
   DetailGoodsData(
       {this.catId,
@@ -41,7 +42,8 @@ class DetailGoodsData {
       this.goodsImg,
       this.originalImg,
       this.goodsNumber,
-      this.goodsDesc});
+      this.goodsDesc,
+      this.goodsSn});
 
   DetailGoodsData.fromJson(Map<String, dynamic> json) {
     catId = json['cat_id'];
@@ -54,6 +56,7 @@ class DetailGoodsData {
     originalImg = json['original_img'];
     goodsNumber = json['goods_number'];
     goodsDesc = json['goods_desc'];
+    goodsSn = json['goods_sn'];
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +71,7 @@ class DetailGoodsData {
     data['original_img'] = this.originalImg;
     data['goods_number'] = this.goodsNumber;
     data['goods_desc'] = this.goodsDesc;
+    data['goods_sn'] = this.goodsSn;
     return data;
   }
 }
