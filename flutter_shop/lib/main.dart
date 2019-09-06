@@ -8,12 +8,14 @@ import 'package:fluro/fluro.dart';
 import './routers/routers.dart';
 import './routers/application.dart';
 import './provide/detail_info.dart';
+import './provide/cart.dart';
 
 void main() {
   var counter = Count();
   var childCategory = ChildCategory();
   var categoryGoodsListProvide = CategoryGoodsListProvide();
   var detailInfoProvide = DetailInfoProvide();
+  var cartProvide = CartProvide();
   var providers = Providers();
 
   // 将状态放入底层
@@ -21,6 +23,7 @@ void main() {
     ..provide(Provider<Count>.value(counter))
     ..provide(Provider<ChildCategory>.value(childCategory))
     ..provide(Provider<DetailInfoProvide>.value(detailInfoProvide))
+    ..provide(Provider<CartProvide>.value(cartProvide))
     ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsListProvide));
   runApp(ProviderNode(child: MyApp(), providers: providers));
 }
