@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import '../provide/cart.dart';
 import 'cart_page/cart_item.dart';
+import 'cart_page/cart_bottom.dart';
 
 class CartPage extends StatelessWidget {
   @override
@@ -15,12 +16,29 @@ class CartPage extends StatelessWidget {
         builder: (context, snapashot){
           if( snapashot.hasData){
             List cartList = Provide.value<CartProvide>(context).cartList;
-            return ListView.builder(
-              itemCount: cartList.length,
-              itemBuilder: (context, index){
-                return CartItem(cartList[index]);
-              },
+
+            return Stack(
+              children: <Widget>[
+                ListView.builder(
+                  itemCount: cartList.length,
+                  itemBuilder: (context, index){
+                    return CartItem(cartList[index]);
+                  },
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: CartBottom()
+                )
+              ],
             );
+
+            // return ListView.builder(
+            //   itemCount: cartList.length,
+            //   itemBuilder: (context, index){
+            //     return CartItem(cartList[index]);
+            //   },
+            // );
           }else{
             return Text('正在加载...');
           }
