@@ -13,10 +13,10 @@ class CartPage extends StatelessWidget {
       ),
       body: FutureBuilder(
         future: _getCartInfo(context),
-        builder: (context, snapashot){
-          if( snapashot.hasData){
+        builder: (context, snapshot){
+          print(snapshot);
+          if( snapshot.hasData){
             List cartList = Provide.value<CartProvide>(context).cartList;
-
             return Stack(
               children: <Widget>[
                 Provide<CartProvide>(
