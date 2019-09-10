@@ -27,6 +27,8 @@ samples, guidance on mobile development, and a full API reference.
 - flutter_easyrefresh：下拉刷新或者上拉加载插件。
 - provide：谷歌最新推出的Flutter状态管理插件。
 - fluttertoast：Toast轻提示插件
+- flutter_html: 解析html
+- shared_preferences： 本地存储
 
 1. 解决容器溢出的bug
 
