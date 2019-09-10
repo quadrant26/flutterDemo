@@ -8,6 +8,7 @@ class CartProvide with ChangeNotifier {
   List<CartInfoModel> cartList = [];
   double allPrice = 0;   // 总价格
   int allGoodsCount = 0; // 商品总数量
+  bool isAllCheck = true; // 是否全选
 
   // 加入购物车
   save(goodsId, goodsName, count, price, images) async {
@@ -73,11 +74,15 @@ class CartProvide with ChangeNotifier {
       // 初始化
       allPrice = 0;
       allGoodsCount = 0;
+      isAllCheck = true;
+
       tempList.forEach((item){
         // 获取价格和总价
         if ( item['isCheck']){
           allPrice += (item['count']*double.parse(item['price']));
           allGoodsCount += item['count'];
+        }else{
+          isAllCheck = false;
         }
         cartList.add(new CartInfoModel.fromJson(item));
         
@@ -106,4 +111,48 @@ class CartProvide with ChangeNotifier {
     prefs.setString('cartInfo', cartString);
     await getCartInfo();
   }
+
+  // 单项商品的选择操作
+  changeCheckState(CartInfoModel cartItem) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString('cartInfo');
+    List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+
+    int tempIndex=0;
+    int changeIndex=0;
+
+    tempList.forEach((item){
+      if(item['goodsId'] == cartItem.goodsId){
+        changeIndex = tempIndex;
+      }
+      tempIndex++;
+    });
+
+    tempList[changeIndex] = cartItem.toJson();
+    cartString = json.encode(tempList).toString();
+    prefs.setString('cartInfo', cartString);
+
+    await getCartInfo();
+  }
+
+  // 购物车底部全选按钮操作
+  changeAllCheckButtonState(bool isCheck) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString('cartInfo');
+    List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+    List<Map> newList = [];
+
+    // dart 不允许改变老旧的值
+    for(var item in tempList){
+      var newItem = item;
+      newItem['isCheck'] = isCheck;
+      newList.add(newItem);
+    }
+
+    cartString = json.encode(newList).toString();
+    prefs.setString('cartInfo', cartString);
+
+    await getCartInfo();
+  }
+
 }

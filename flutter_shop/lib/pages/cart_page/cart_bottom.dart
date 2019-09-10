@@ -27,13 +27,16 @@ class CartBottom extends StatelessWidget {
 
   // 全选按钮
   Widget _selectAllButton (context){
+    bool isAllCheck = Provide.value<CartProvide>(context).isAllCheck;
     return Container(
       child: Row(
         children: <Widget>[
           Checkbox(
-            value: true,
+            value: isAllCheck,
             activeColor: Colors.pink,
-            onChanged: (bool val){},
+            onChanged: (bool val){
+              Provide.value<CartProvide>(context).changeAllCheckButtonState(val);
+            },
           ),
           Text(
             '全选',
@@ -56,7 +59,7 @@ class CartBottom extends StatelessWidget {
             children: <Widget>[
               Container(
                 alignment: Alignment.centerRight,
-                width: ScreenUtil().setWidth(280),
+                width: ScreenUtil().setWidth(250),
                 child: Text(
                   '合计',
                   style: TextStyle(fontSize: ScreenUtil().setSp(36))
@@ -64,7 +67,7 @@ class CartBottom extends StatelessWidget {
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                width: ScreenUtil().setWidth(150),
+                width: ScreenUtil().setWidth(180),
                 child: Text(
                   '￥${allPrice}',
                   style: TextStyle(color: Colors.pink, fontSize: ScreenUtil().setSp(36))
