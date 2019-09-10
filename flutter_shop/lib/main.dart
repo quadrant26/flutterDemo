@@ -9,6 +9,7 @@ import './routers/routers.dart';
 import './routers/application.dart';
 import './provide/detail_info.dart';
 import './provide/cart.dart';
+import './provide/currentIndex.dart';
 
 void main() {
   var counter = Count();
@@ -16,6 +17,7 @@ void main() {
   var categoryGoodsListProvide = CategoryGoodsListProvide();
   var detailInfoProvide = DetailInfoProvide();
   var cartProvide = CartProvide();
+  var currentIndexProvide = CurrentIndexProvide();
   var providers = Providers();
 
   // 将状态放入底层
@@ -24,6 +26,7 @@ void main() {
     ..provide(Provider<ChildCategory>.value(childCategory))
     ..provide(Provider<DetailInfoProvide>.value(detailInfoProvide))
     ..provide(Provider<CartProvide>.value(cartProvide))
+    ..provide(Provider<CurrentIndexProvide>.value(currentIndexProvide))
     ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsListProvide));
   runApp(ProviderNode(child: MyApp(), providers: providers));
 }
