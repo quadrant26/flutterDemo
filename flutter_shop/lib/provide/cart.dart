@@ -21,12 +21,20 @@ class CartProvide with ChangeNotifier {
     // 循环判断是否有重复的
     bool isHave = false;
     int ival = 0;
+    // 初始化
+    allPrice = 0;
+    allGoodsCount = 0;
+
     tempList.forEach((item){
       // 有重复的
       if(item['goodsId'] == goodsId){
         tempList[ival]['count'] = item['count']+1;
         cartList[ival].count++;
         isHave = true;
+      }
+      if( item['isCheck']){
+        allPrice += (double.parse(cartList[ival].price) * cartList[ival].count);
+        allGoodsCount += cartList[ival].count;
       }
       ival++;
     });
@@ -42,6 +50,10 @@ class CartProvide with ChangeNotifier {
       };
       tempList.add(newGoods);
       cartList.add(CartInfoModel.fromJson(newGoods));
+
+      allPrice += double.parse(price)*count;
+      allGoodsCount += cartList[ival].count;
+
     }
 
     // 数据静态化
